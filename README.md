@@ -44,4 +44,4 @@ The tests cover the `KindergartenTest` area in the ShopTARge24 application:
 4. Open **Test Explorer**.
 5. Run all tests in the `SeleniumShopUITests` project.
 
-by Anneli 2025
+by Sepp 2025
