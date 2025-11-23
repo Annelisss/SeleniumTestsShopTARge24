@@ -3,7 +3,6 @@
 This repository contains an MSTest Selenium UI test project for the **ShopTARge24** web application.
 
 ## Project
-
 - **Test project:** `SeleniumShopUITests`
 - **Framework:** .NET 9 + MSTest
 - **Browser:** Chrome (Selenium WebDriver)
@@ -36,7 +35,6 @@ The tests cover the `KindergartenTest` area in the ShopTARge24 application:
      - Deletes the first kindergarten from the index table and verifies that this row is no longer visible after returning to the index page.
  
 ## How to run tests
-
 1. Start the **ShopTARge24** web application (branch `feature/kindergarten-selenium-copy`).
    - The application must be available at `https://localhost:7282/`.
 2. Open the solution `SeleniumTestsShopTARge24` in Visual Studio.
