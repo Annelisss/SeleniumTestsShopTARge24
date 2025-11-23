@@ -34,7 +34,7 @@ The tests cover the `KindergartenTest` area in the ShopTARge24 application:
 5. **Delete**
    - Test: `CanDeleteKindergarten`
      - Deletes the first kindergarten from the index table and verifies that this row is no longer visible after returning to the index page.
-
+ 
 ## How to run tests
 
 1. Start the **ShopTARge24** web application (branch `feature/kindergarten-selenium-copy`).
