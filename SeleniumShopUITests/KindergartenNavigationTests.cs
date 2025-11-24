@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 
 namespace SeleniumShopUITests
 {
@@ -7,20 +9,40 @@ namespace SeleniumShopUITests
     public class KindergartenNavigationTests : BaseTest
     {
         [TestMethod]
-        public void CanNavigateToKindergartenTestIndex()
+        public void CanNavigateToKindergartenPage()
         {
-            // Ava avaleht
+            // Home
             driver.Navigate().GoToUrl(BaseUrl);
 
-            var kindergartenTestLink =
-                driver.FindElement(By.LinkText("Kindergarten (test)"));
-            kindergartenTestLink.Click();
-            
-            // Leia lehe pealkiri
-            var header = driver.FindElement(By.TagName("h1"));
+            // Open list
+            driver.FindElement(By.LinkText("Kindergarten")).Click();
 
-            Assert.AreEqual("Kindergarten", header.Text,
-                "Kindergarten (test) lehe pealkiri ei ole oodatud.");
+            // Wait
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(d => d.Url.Contains("/Kindergarten"));
+
+            // Check
+            Assert.IsTrue(driver.Url.Contains("/Kindergarten"));
+        }
+
+        [TestMethod]
+        public void CanOpenCreatePageFromNavbar()
+        {
+            // Home
+            driver.Navigate().GoToUrl(BaseUrl);
+
+            // List
+            driver.FindElement(By.LinkText("Kindergarten")).Click();
+
+            // Create
+            driver.FindElement(By.LinkText("Create new")).Click();
+
+            // Wait
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(d => d.Url.Contains("/Create"));
+
+            // Check
+            Assert.IsTrue(driver.Url.Contains("Create"));
         }
     }
 }

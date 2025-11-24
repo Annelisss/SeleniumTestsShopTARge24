@@ -9,7 +9,7 @@ namespace SeleniumShopUITests
     {
         protected IWebDriver driver;
 
-        protected const string BaseUrl = "https://localhost:7282";
+        protected const string BaseUrl = "https://localhost:7282/";
 
         [TestInitialize]
         public void Setup()

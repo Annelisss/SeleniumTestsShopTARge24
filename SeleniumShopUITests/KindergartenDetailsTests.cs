@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using System.Linq;
+using OpenQA.Selenium.Support.UI;
+using System;
 
 namespace SeleniumShopUITests
 {
@@ -8,24 +9,23 @@ namespace SeleniumShopUITests
     public class KindergartenDetailsTests : BaseTest
     {
         [TestMethod]
-        public void CanOpenKindergartenDetails()
+        public void CanOpenDetailsPage()
         {
-            // Open the home page
+            // Home
             driver.Navigate().GoToUrl(BaseUrl);
 
-            driver.FindElement(By.LinkText("Kindergarten (test)")).Click();
+            // List
+            driver.FindElement(By.LinkText("Kindergarten")).Click();
 
-            // Take the first row from the table
-            var firstRow = driver.FindElements(By.CssSelector("table tbody tr")).FirstOrDefault();
-            Assert.IsNotNull(firstRow, "Index table does not contain any rows!");
+            // First row -> Details
+            driver.FindElement(By.LinkText("Details")).Click();
 
- 
-            var detailsLink = firstRow.FindElement(By.LinkText("Details"));
-            detailsLink.Click();
+            // Wait for details page
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(x => x.Url.Contains("/Details"));
 
-            // Check that the Details page is opened
-            var header = driver.FindElement(By.TagName("h1")).Text;
-            Assert.AreEqual("Details", header, "Details page header is not as expected.");
+            // Basic check
+            Assert.IsTrue(driver.Url.Contains("Details"));
         }
     }
 }

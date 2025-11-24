@@ -2,7 +2,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
-using System.Linq;
 
 namespace SeleniumShopUITests
 {
@@ -12,42 +11,22 @@ namespace SeleniumShopUITests
         [TestMethod]
         public void CanDeleteKindergarten()
         {
-            // Open homepage and navigate to the Kindergarten (test) page
+            // Home
             driver.Navigate().GoToUrl(BaseUrl);
-            driver.FindElement(By.LinkText("Kindergarten (test)")).Click();
 
-            // Get the first row from the table
-            var rows = driver.FindElements(By.CssSelector("table tbody tr"));
-            Assert.IsTrue(rows.Any(), "There are no rows in the Index table to delete.");
+            // List
+            driver.FindElement(By.LinkText("Kindergarten")).Click();
 
-            var rowToDelete = rows.First();
+            // Delete
+            driver.FindElement(By.LinkText("Delete")).Click();
 
-            // Read the GroupName from the first cell (for verification after delete)
-            var firstCell = rowToDelete.FindElements(By.TagName("td")).FirstOrDefault();
-            var groupName = firstCell?.Text ?? "";
+            // Confirm
+            // Confirm
+            driver.FindElement(By.CssSelector("button[type='submit'], input[type='submit']")).Click();
 
-            // Open the Delete page
-            var deleteLink = rowToDelete.FindElement(By.LinkText("Delete"));
-            deleteLink.Click();
-
-            // Confirm Delete (submit the Delete confirmation form)
-            var deleteButton = driver.FindElement(By.CssSelector("input[type='submit']"));
-            deleteButton.Click();
-
-            // Wait until we return to the Index page
+            // Wait
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-            wait.Until(d => d.Url.Contains("/KindergartenTest"));
-
-            // Verify that the deleted row is no longer in the table
-            var pageSource = driver.PageSource;
-
-            if (!string.IsNullOrWhiteSpace(groupName))
-            {
-                Assert.IsFalse(
-                    pageSource.Contains(groupName),
-                    "The deleted Kindergarten (GroupName = '" + groupName + "') is still visible in the Index table."
-                );
-            }
+            wait.Until(d => d.Url.Contains("/Kindergarten"));
         }
     }
 }

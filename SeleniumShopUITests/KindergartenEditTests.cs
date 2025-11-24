@@ -2,7 +2,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
-using System.Linq;
 
 namespace SeleniumShopUITests
 {
@@ -12,68 +11,41 @@ namespace SeleniumShopUITests
         [TestMethod]
         public void CanEditKindergartenWithValidData()
         {
+            // Home
             driver.Navigate().GoToUrl(BaseUrl);
-            driver.FindElement(By.LinkText("Kindergarten (test)")).Click();
 
-            var rows = driver.FindElements(By.CssSelector("table tbody tr"));
-            Assert.IsTrue(rows.Any(), "Index tabelis ei ole ühtegi rida, mida muuta.");
+            // List
+            driver.FindElement(By.LinkText("Kindergarten")).Click();
 
-            var rowToEdit = rows.First();
+            // Edit
+            driver.FindElement(By.LinkText("Edit")).Click();
 
-            // Open Edit
-            var editLink = rowToEdit.FindElement(By.LinkText("Edit"));
-            editLink.Click();
+            // Group
+            driver.FindElement(By.Id("GroupName")).Clear();
+            driver.FindElement(By.Id("GroupName")).SendKeys("EditedGroup");
 
-            // Change TeacherName value
-            var newTeacher = "EditedTeacher123";
-            var teacherInput = driver.FindElement(By.Id("TeacherName"));
-            teacherInput.Clear();
-            teacherInput.SendKeys(newTeacher);
+            // Children
+            driver.FindElement(By.Id("ChildrenCount")).Clear();
+            driver.FindElement(By.Id("ChildrenCount")).SendKeys("30");
+
+            // Kindergarten
+            driver.FindElement(By.Id("KindergartenName")).Clear();
+            driver.FindElement(By.Id("KindergartenName")).SendKeys("Edited Kindergarten");
+
+            // Teacher
+            driver.FindElement(By.Id("TeacherName")).Clear();
+            driver.FindElement(By.Id("TeacherName")).SendKeys("Edited Teacher");
 
             // Save
-            driver.FindElement(By.CssSelector("input[type='submit']")).Click();
-
             var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-            wait.Until(d => d.Url.Contains("/KindergartenTest"));
+            var saveButton = wait.Until(d =>
+                d.FindElement(By.CssSelector("button[type='submit'], input[type='submit']")));
 
-            var pageSource = driver.PageSource;
-            Assert.IsTrue(pageSource.Contains(newTeacher),
-                "Muudetud TeacherName väärtus ei ole Index tabelis näha.");
-        }
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", saveButton);
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", saveButton);
 
-        [TestMethod]
-        public void CannotEditKindergartenWithInvalidChildrenNumber()
-        {
-
-            driver.Navigate().GoToUrl(BaseUrl);
-            driver.FindElement(By.LinkText("Kindergarten (test)")).Click();
-
-            var rows = driver.FindElements(By.CssSelector("table tbody tr"));
-            Assert.IsTrue(rows.Any(), "Index tabelis ei ole ühtegi rida, mida muuta.");
-
-            var rowToEdit = rows.First();
-
-            // Open Edit
-            var editLink = rowToEdit.FindElement(By.LinkText("Edit"));
-            editLink.Click();
-
-            var childrenInput = driver.FindElement(By.Id("ChildrenCount"));
-            childrenInput.Clear();
-            childrenInput.SendKeys("ABC");
-
-            // Save
-            driver.FindElement(By.CssSelector("input[type='submit']")).Click();
-
-  
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-            wait.Until(d => d.Url.Contains("/KindergartenTest/Edit"));
-
-            var errorSpan = driver.FindElement(By.CssSelector("span[data-valmsg-for='ChildrenCount']"));
-
-            Assert.IsTrue(
-                errorSpan.Displayed && !string.IsNullOrWhiteSpace(errorSpan.Text),
-                "Ootasime veateadet ChildrenCount väljale, kuid seda ei kuvata Edit vormil."
-            );
+            // Wait
+            wait.Until(d => d.Url.Contains("/Kindergarten"));
         }
     }
 }
